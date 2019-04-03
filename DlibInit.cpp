@@ -77,7 +77,6 @@ std::vector<cv::Point2d> DlibInit::find_68_point(cv::Mat &src_img)
     dlib::cv_image<uchar> cimg(src_img);
     //使用人脸检测器检测人脸
     std::vector<dlib::rectangle> faces = detector(cimg);
-    //如果检测到人脸,检测不到另做处理 TODO
     std::vector<cv::Point2d> image_pts;
     if (faces.size() > 0) {
         //使用关键点检测器检测人脸的68点
