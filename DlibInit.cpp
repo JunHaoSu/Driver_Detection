@@ -4,10 +4,13 @@
 
 #include "DlibInit.h"
 #include "utils/ConfigManager.h"
+#include "utilsFunction.h"
 using namespace dlib;
 using namespace cv;
 
-/**构造函数,对象初始化时将需要的变量进行初始化*/
+/**
+ *  构造函数,对象初始化时将需要的变量进行初始化
+ */
 DlibInit::DlibInit()
 {
     //从配置文件调取6点模型文件路径
@@ -19,12 +22,16 @@ DlibInit::DlibInit()
     init_object_pts();
 }
 
-/**析构函数,避免内存泄露*/
+/**
+ * 析构函数,避免内存泄露
+ */
 DlibInit::~DlibInit() {
 //这个对象长期存在,不销毁
 }
 
-/**初始化3D模型*/
+/**
+ * 初始化3D模型
+ */
 void DlibInit::init_object_pts()
 {
     object_pts.push_back(cv::Point3d(6.825897, 6.760612, 4.402142));     //#33 left brow left corner
@@ -44,7 +51,9 @@ void DlibInit::init_object_pts()
 
 }
 
-/**填写相机内联函数和失真系数*/
+/**
+ * 填写相机内联函数和失真系数
+ */
 void DlibInit::init_cam_intrinsics()
 {
 //相机内参数矩阵
@@ -60,16 +69,20 @@ void DlibInit::init_cam_intrinsics()
 
 }
 
-
-/**图像预处理函数*/
+/**
+ * 图像预处理函数
+ * @param img
+ */
 void  DlibInit::image_processing(cv::Mat &img)
 {
     cv::cvtColor(img,img,CV_BGR2GRAY);//转化成灰度图
 }
 
-
-/**68个特征点提取函数*/
-std::vector<cv::Point2d> DlibInit::find_68_point(cv::Mat &src_img)
+/**
+ * 68个特征点提取函数
+ * @param src_img
+ */
+void DlibInit::find_68_point(cv::Mat &src_img)
 {
 //图像初始化
     image_processing(src_img);
@@ -77,20 +90,20 @@ std::vector<cv::Point2d> DlibInit::find_68_point(cv::Mat &src_img)
     dlib::cv_image<uchar> cimg(src_img);
     //使用人脸检测器检测人脸
     std::vector<dlib::rectangle> faces = detector(cimg);
-    std::vector<cv::Point2d> image_pts;
+    //std::vector<cv::Point2d> image_pts;
     if (faces.size() > 0) {
         //使用关键点检测器检测人脸的68点
         dlib::full_object_detection shape = predictor(cimg, faces[0]);
         for (int i = 0; i < 68; i++) {
-            image_pts.push_back(cv::Point2d(shape.part(i).x(), shape.part(i).y()));
+            face_68_point.push_back(cv::Point2d(shape.part(i).x(), shape.part(i).y()));
         }
     }
-    return image_pts;
 }
 
-
-/**头部姿态估计,并且计算三个欧拉角*/
-cv::Mat DlibInit::cal_detect_angle(cv::Mat &src_img)
+/**
+ * 头部姿态估计,并且计算三个欧拉角
+ */
+cv::Mat DlibInit::cal_detect_angle()
 {
     //decomposeProjectionMatrix()函数的temp buf
     cv::Mat out_intrinsics = cv::Mat(3, 3, CV_64FC1);
@@ -107,25 +120,25 @@ cv::Mat DlibInit::cal_detect_angle(cv::Mat &src_img)
 
 
     //拿到所有的68个点的位置
-    std::vector<cv::Point2d> img_pts_68 = DlibInit::find_68_point(src_img);
-    if(img_pts_68.empty())
+
+    if(face_68_point.empty())
         return euler_angle;
     //拿到定义计算姿态的2D点集
     std::vector<cv::Point2d> img_pts_need;
-    img_pts_need.push_back(img_pts_68[17]); //#17 left brow left corner
-    img_pts_need.push_back(img_pts_68[21]); //#21 left brow right corner
-    img_pts_need.push_back(img_pts_68[22]); //#22 right brow left corner
-    img_pts_need.push_back(img_pts_68[26]); //#26 right brow right corner
-    img_pts_need.push_back(img_pts_68[36]); //#36 left eye left corner
-    img_pts_need.push_back(img_pts_68[39]); //#39 left eye right corner
-    img_pts_need.push_back(img_pts_68[42]); //#42 right eye left corner
-    img_pts_need.push_back(img_pts_68[45]); //#45 right eye right corner
-    img_pts_need.push_back(img_pts_68[31]); //#31 nose left corner
-    img_pts_need.push_back(img_pts_68[35]); //#35 nose right corner
-    img_pts_need.push_back(img_pts_68[48]); //#48 mouth left corner
-    img_pts_need.push_back(img_pts_68[54]); //#54 mouth right corner
-    img_pts_need.push_back(img_pts_68[57]); //#57 mouth central bottom corner
-    img_pts_need.push_back(img_pts_68[8]);   //#8 chin corner
+    img_pts_need.push_back(face_68_point[17]); //#17 left brow left corner
+    img_pts_need.push_back(face_68_point[21]); //#21 left brow right corner
+    img_pts_need.push_back(face_68_point[22]); //#22 right brow left corner
+    img_pts_need.push_back(face_68_point[26]); //#26 right brow right corner
+    img_pts_need.push_back(face_68_point[36]); //#36 left eye left corner
+    img_pts_need.push_back(face_68_point[39]); //#39 left eye right corner
+    img_pts_need.push_back(face_68_point[42]); //#42 right eye left corner
+    img_pts_need.push_back(face_68_point[45]); //#45 right eye right corner
+    img_pts_need.push_back(face_68_point[31]); //#31 nose left corner
+    img_pts_need.push_back(face_68_point[35]); //#35 nose right corner
+    img_pts_need.push_back(face_68_point[48]); //#48 mouth left corner
+    img_pts_need.push_back(face_68_point[54]); //#54 mouth right corner
+    img_pts_need.push_back(face_68_point[57]); //#57 mouth central bottom corner
+    img_pts_need.push_back(face_68_point[8]);   //#8 chin corner
     /*solvePnp函数参数如下
     object_pts 3D集合
     img_pts_need 2D集合
@@ -149,4 +162,38 @@ cv::Mat DlibInit::cal_detect_angle(cv::Mat &src_img)
     cv::decomposeProjectionMatrix(pose_mat, out_intrinsics, out_rotation, out_translation, cv::noArray(), cv::noArray(), cv::noArray(), euler_angle);
 
     return euler_angle;
+}
+
+/**
+ *  ear值算法 左上右下+右上左下的距离除以左右眼角的两倍
+    大于0.3代表眼睛睁开
+    :param eye:眼睛特征点坐标数组
+    :return:ear值*/
+double DlibInit::eye_aspect_ratio()
+{
+    if (!face_68_point.empty())
+    {
+        std::vector<cv::Point2d> right_eye(&face_68_point[36], &face_68_point[42]);
+        std::vector<cv::Point2d> left_eye(&face_68_point[42], &face_68_point[48]);
+        double left_ear = cal_ear(left_eye);
+        double right_ear = cal_ear(right_eye);
+        double ear = (left_ear + right_ear)/2.0;
+        return ear;
+    }else{
+        return 0.0;
+    }
+}
+
+
+double DlibInit::mouth_aspect_ratio()
+{
+
+}
+
+
+/**
+ * 读取下一帧视频时将上一帧的68点数据清空*/
+void DlibInit::clear_68_point()
+{
+    face_68_point.clear();
 }

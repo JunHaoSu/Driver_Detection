@@ -25,7 +25,16 @@ public:
     DlibInit();
     ~DlibInit();
     cv::Mat showface();
-    cv::Mat cal_detect_angle(cv::Mat &src_img);//人脸检测
+
+    cv::Mat cal_detect_angle();//人脸欧拉角检测
+
+    double mouth_aspect_ratio();
+
+    void clear_68_point();//清空68点数据
+
+    double eye_aspect_ratio();//人眼纵横比数据检测
+
+    void find_68_point(cv::Mat &src_img);//找到68个点的坐标
 
 private:
     dlib::shape_predictor predictor;//关键点检测器
@@ -45,8 +54,7 @@ private:
         cv::Mat dist_coeffs;//畸变系数
     } cam_parameter1;
     void init_cam_intrinsics();//初始化相机内参数矩阵和畸变系数
-
-    std::vector<cv::Point2d> find_68_point(cv::Mat &src_img);//找到68个点的坐标
+    std::vector<cv::Point2d> face_68_point;//人脸68点,写到对象公有属性中,提供给其他的函数调用
 };
 
 
