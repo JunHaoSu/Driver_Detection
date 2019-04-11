@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <string>
 #include "DlibInit.h"
 //#include "utils/ConfigManager.h"
 
@@ -15,7 +15,9 @@ int main()
     std::ostringstream outtext;
     DlibInit* test_obj = new DlibInit();
 
-    int count_frame = 0;
+    int eye_count_frame = 0;
+    int mouth_count_frame = 0;
+
     while (1)
     {
         // Grab a frame
@@ -25,19 +27,37 @@ int main()
 
         test_obj->find_68_point(temp);
 
+        std::string eye_status = "open";
+        std::string mouth_status = "close";
+
 
         cv::Mat re = test_obj->cal_detect_angle();
         double ear = test_obj->eye_aspect_ratio();
+        double open_mouth = test_obj->mouth_aspect_ratio();
+
+
+        if(ear < 0.29){
+            eye_count_frame++;
+            if(eye_count_frame > 10){
+                eye_status = "close";
+            }
+        }else{
+            eye_count_frame = 0;
+        }
+
 
 
        //添加一个计数器,防止抖动,如果真的是闭眼,不会抖动超过十次,十次也是经验值
-       if(ear < 0.3){
-            count_frame++;
-            if(count_frame > 10){
-                std::cout<<"闭眼"<<std::endl;
+       if(open_mouth > 0.5){
+           mouth_count_frame++;
+            if(mouth_count_frame > 5){
+                mouth_status = "open";
+                if(mouth_count_frame > 30){
+                    mouth_status = "Yawning";
+                }
             }
         }else{
-            count_frame = 0;
+           mouth_count_frame = 0;
         }
 
         outtext << "X: " << std::setprecision(3) <<re.at<double>(0);
@@ -49,6 +69,14 @@ int main()
         outtext << "Z: " << std::setprecision(3) <<re.at<double>(2);
         cv::putText(temp, outtext.str(), cv::Point(50, 80), cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(0, 0, 0));
         outtext.str("");
+        outtext << "eye: " << std::setprecision(3) <<eye_status;
+        cv::putText(temp, outtext.str(), cv::Point(50, 100), cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(0, 0, 0));
+        outtext.str("");
+        outtext << "mouth: " << std::setprecision(3) <<mouth_status;
+        cv::putText(temp, outtext.str(), cv::Point(50, 120), cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(0, 0, 0));
+        outtext.str("");
+
+
         cv::imshow("结果处理图",temp);
 
         test_obj->clear_68_point();

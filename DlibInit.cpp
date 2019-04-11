@@ -188,9 +188,10 @@ double DlibInit::mouth_aspect_ratio()
 {
     if(!face_68_point.empty()){
         std::vector<cv::Point2d> mouth_point(&face_68_point[48],&face_68_point[68]);
-        //TODO
+        return cal_mouth(mouth_point);
+    }else{
+        return 0;
     }
-    return 0;
 }
 
 

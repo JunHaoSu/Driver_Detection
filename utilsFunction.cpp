@@ -18,13 +18,21 @@ double cal_ear(std::vector<cv::Point2d> &eye)
     return ear_number;
 }
 
-
+/**
+ * 计算张口度
+ * @param mouth
+ * @return
+ */
 double cal_mouth(std::vector<cv::Point2d> &mouth)
 {
-    //TODO
+    double inside_width = getDistance(mouth[12],mouth[16]);
+    double inside_high = getDistance(mouth[14],mouth[18]);
+    double outside_width = getDistance(mouth[0],mouth[6]);
+    double outside_high = getDistance(mouth[3],mouth[9]);
+    double open_mouth_inside = inside_high / inside_width;
+    double open_mouth_outside = outside_high / outside_width;
+    return (open_mouth_inside + open_mouth_outside) / 2;
 }
-
-
 
 
 
