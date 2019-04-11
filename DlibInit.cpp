@@ -23,7 +23,7 @@ DlibInit::DlibInit()
 }
 
 /**
- * 析构函数,避免内存泄露
+ * 析构函数
  */
 DlibInit::~DlibInit() {
 //这个对象长期存在,不销毁
@@ -171,8 +171,7 @@ cv::Mat DlibInit::cal_detect_angle()
     :return:ear值*/
 double DlibInit::eye_aspect_ratio()
 {
-    if (!face_68_point.empty())
-    {
+    if (!face_68_point.empty()){
         std::vector<cv::Point2d> right_eye(&face_68_point[36], &face_68_point[42]);
         std::vector<cv::Point2d> left_eye(&face_68_point[42], &face_68_point[48]);
         double left_ear = cal_ear(left_eye);
@@ -187,7 +186,11 @@ double DlibInit::eye_aspect_ratio()
 
 double DlibInit::mouth_aspect_ratio()
 {
-
+    if(!face_68_point.empty()){
+        std::vector<cv::Point2d> mouth_point(&face_68_point[48],&face_68_point[68]);
+        //TODO
+    }
+    return 0;
 }
 
 

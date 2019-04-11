@@ -10,5 +10,5 @@
 - Dlib 19.16 
 
 ## 68关键点分布图
-![68点分布图](https://cloud.githubusercontent.com/assets/16308037/24229391/1910e9cc-0fb4-11e7-987b-0fecce2c829e.JPG)
+![68点分布图](./res/1910e9cc-0fb4-11e7-987b-0fecce2c829e.JPG)
 

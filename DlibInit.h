@@ -24,7 +24,6 @@ class DlibInit {
 public:
     DlibInit();
     ~DlibInit();
-    cv::Mat showface();
 
     cv::Mat cal_detect_angle();//人脸欧拉角检测
 
@@ -54,7 +53,7 @@ private:
         cv::Mat dist_coeffs;//畸变系数
     } cam_parameter1;
     void init_cam_intrinsics();//初始化相机内参数矩阵和畸变系数
-    std::vector<cv::Point2d> face_68_point;//人脸68点,写到对象公有属性中,提供给其他的函数调用
+    std::vector<cv::Point2d> face_68_point;//人脸68点,属性私有,操作方法公有
 };
 
 

@@ -19,6 +19,15 @@ double cal_ear(std::vector<cv::Point2d> &eye)
 }
 
 
+double cal_mouth(std::vector<cv::Point2d> &mouth)
+{
+    //TODO
+}
+
+
+
+
+
 /**
  * 求两点之间的距离
  * @param pointA
