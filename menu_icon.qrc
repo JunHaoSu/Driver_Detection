@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/image">
+        <file>res/Camera.png</file>
+        <file>res/Close.png</file>
+        <file>res/Files.png</file>
+        <file>res/Menu.png</file>
+        <file>res/Pause.png</file>
+        <file>res/Setting.png</file>
+        <file>res/Start.png</file>
+        <file>res/about.png</file>
+    </qresource>
+</RCC>

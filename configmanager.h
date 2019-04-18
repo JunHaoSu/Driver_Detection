@@ -1,15 +1,14 @@
-//
-// Created by sujunhao on 19-3-24.
-//
+#ifndef CONFIGMANAGER_H
+#define CONFIGMANAGER_H
 
-#ifndef DRIVER_DETECTION_CONFIGMANAGER_H
-#define DRIVER_DETECTION_CONFIGMANAGER_H
 
 #include <map>
 #include <string>
 #include <fstream>
 #include <iostream>
-
+/**
+ * @brief 配置文件读取类,单例模式,懒汉式
+ */
 class ConfigManager {
 private:
     ConfigManager(std::string filename);
@@ -17,11 +16,9 @@ private:
     static ConfigManager *instance_;
 
 public:
-    static ConfigManager *GetInstance(std::string init_file_path="../res/config.ini");
+    static ConfigManager *GetInstance(std::string init_file_path="config.ini");
     std::string get_date(std::string key);
     ~ConfigManager();
-
 };
 
-
-#endif //DRIVER_DETECTION_CONFIGMANAGER_H
+#endif // CONFIGMANAGER_H

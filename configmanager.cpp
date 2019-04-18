@@ -1,8 +1,5 @@
-//
-// Created by sujunhao on 19-3-24.
-//
+#include "configmanager.h"
 
-#include "ConfigManager.h"
 using namespace std;
 
 ConfigManager::ConfigManager(std::string filename)

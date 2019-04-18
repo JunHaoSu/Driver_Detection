@@ -1,10 +1,6 @@
-//
-// Created by sujunhao on 19-3-24.
-//
-
-#include "DlibInit.h"
-#include "utils/ConfigManager.h"
-#include "utilsFunction.h"
+#include "dlibinit.h"
+#include "configmanager.h"
+#include "utilsfunction.h"
 using namespace dlib;
 using namespace cv;
 
@@ -183,7 +179,11 @@ double DlibInit::eye_aspect_ratio()
     }
 }
 
-
+/**
+ * 张口度计算方法高度除以宽度
+ * @brief DlibInit::mouth_aspect_ratio
+ * @return
+ */
 double DlibInit::mouth_aspect_ratio()
 {
     if(!face_68_point.empty()){
@@ -200,4 +200,11 @@ double DlibInit::mouth_aspect_ratio()
 void DlibInit::clear_68_point()
 {
     face_68_point.clear();
+}
+
+
+std::vector<cv::Point2d> DlibInit::get_68_point(){
+    if(face_68_point.empty())
+        return std::vector<cv::Point2d>();
+    return face_68_point;
 }

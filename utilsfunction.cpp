@@ -1,9 +1,4 @@
-//
-// Created by sujunhao on 19-4-3.
-//
-#include "utilsFunction.h"
-
-
+#include "utilsfunction.h"
 /**
  * ear值算法 左上右下+右上左下的距离除以左右眼角的两倍,大于0.3代表眼睛睁开
  * @param eye 眼睛的特征点坐标数组

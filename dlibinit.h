@@ -1,9 +1,5 @@
-//
-// Created by sujunhao on 19-3-24.
-//
-
-#ifndef DRIVER_DETECTION_DLIBINIT_H
-#define DRIVER_DETECTION_DLIBINIT_H
+#ifndef DLIBINIT_H
+#define DLIBINIT_H
 
 #include <opencv2/opencv.hpp>
 #include <dlib/opencv.h>
@@ -27,13 +23,15 @@ public:
 
     cv::Mat cal_detect_angle();//人脸欧拉角检测
 
-    double mouth_aspect_ratio();
+    double mouth_aspect_ratio();//嘴巴张口度检测
 
     void clear_68_point();//清空68点数据
 
     double eye_aspect_ratio();//人眼纵横比数据检测
 
     void find_68_point(cv::Mat &src_img);//找到68个点的坐标
+
+    std::vector<cv::Point2d> get_68_point();//返回68点坐标,测试用
 
 private:
     dlib::shape_predictor predictor;//关键点检测器
@@ -55,6 +53,4 @@ private:
     void init_cam_intrinsics();//初始化相机内参数矩阵和畸变系数
     std::vector<cv::Point2d> face_68_point;//人脸68点,属性私有,操作方法公有
 };
-
-
-#endif //DRIVER_DETECTION_DLIBINIT_H
+#endif // DLIBINIT_H

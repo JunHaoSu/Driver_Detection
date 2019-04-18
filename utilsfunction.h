@@ -1,9 +1,5 @@
-//
-// Created by sujunhao on 19-4-3.
-//
-
-#ifndef DRIVER_DETECTION_UTILSFUNCTION_H
-#define DRIVER_DETECTION_UTILSFUNCTION_H
+#ifndef UTILSFUNCTION_H
+#define UTILSFUNCTION_H
 
 #include <vector>
 #include <opencv2/opencv.hpp>
@@ -14,4 +10,4 @@ double getDistance(cv::Point2d pointA, cv::Point2d pointB);
 
 double cal_mouth(std::vector<cv::Point2d> &mouth);
 
-#endif //DRIVER_DETECTION_UTILSFUNCTION_H
+#endif // UTILSFUNCTION_H
