@@ -1,6 +1,4 @@
 #include "dlibinit.h"
-#include "configmanager.h"
-#include "utilsfunction.h"
 using namespace dlib;
 using namespace cv;
 
@@ -9,9 +7,10 @@ using namespace cv;
  */
 DlibInit::DlibInit()
 {
-    //从配置文件调取6点模型文件路径
-    ConfigManager *config = ConfigManager::GetInstance();
-    std::string predictor_face_model_path = config->get_date("face_model_path").c_str();
+    //从配置文件调取模型文件路径
+    QSettings *configIniReader = new QSettings("config.ini", QSettings::IniFormat);
+    std::string predictor_face_model_path = configIniReader->value("/dlib/face_model_path").toString().toStdString();
+    delete configIniReader;//释放内存
     dlib::deserialize(predictor_face_model_path) >> predictor;
     detector = dlib::get_frontal_face_detector();
     init_cam_intrinsics();
@@ -53,16 +52,15 @@ void DlibInit::init_object_pts()
 void DlibInit::init_cam_intrinsics()
 {
 //相机内参数矩阵
-    static double K[9] = { 6.5308391993466671e+002, 0.0, 3.1950000000000000e+002,
-             0.0, 6.5308391993466671e+002, 2.3950000000000000e+002,
+    static double K[9] = { 4.0045376746794346e+02, 0.0, 3.1950000000000000e+02,
+             0.0, 4.0045376746794346e+02, 2.3950000000000000e+002,
              0.0, 0.0, 1.0 };
     //畸变系数
-    static  double D[5] = { 7.0834633684407095e-002, 6.9140193737175351e-002, 0.0,
-             0.0, -1.3073460323689292e+000 };
+    static  double D[5] = { -3.2419021535567855e-01, 1.9565880322429757e-01, 0.0,
+             0.0, -9.0203932325012448e-02 };
 
     cam_parameter1.cam_matrix = cv::Mat(3, 3, CV_64FC1, K);//相机内参数矩阵
     cam_parameter1.dist_coeffs = cv::Mat(5, 1, CV_64FC1, D);//畸变系数
-
 }
 
 /**
@@ -112,7 +110,7 @@ cv::Mat DlibInit::cal_detect_angle()
     cv::Mat translation_vec;//平移向量
     cv::Mat rotation_mat;//旋转矩阵
     cv::Mat pose_mat = cv::Mat(3, 4, CV_64FC1);     //3 x 4 R | T
-    cv::Mat euler_angle = cv::Mat(3, 1, CV_64FC1, {90,90,90});//初始化欧拉角为90,如果显示90代表未检测到人脸
+    cv::Mat euler_angle = cv::Mat(3, 1, CV_64FC1, {0,0,0});//初始化欧拉角为90,如果显示90代表未检测到人脸
 
 
     //拿到所有的68个点的位置
@@ -145,8 +143,8 @@ cv::Mat DlibInit::cal_detect_angle()
      */
     cv::solvePnP(object_pts, img_pts_need, cam_parameter1.cam_matrix, cam_parameter1.dist_coeffs, rotation_vec, translation_vec);
     //求出欧拉角
-    //罗德里格斯变换
 
+    //罗德里格斯变换
     cv::Rodrigues(rotation_vec, rotation_mat);
     //垂直拼接 pose_mat = [ rataton_mat translation_vec ]
     cv::hconcat(rotation_mat, translation_vec, pose_mat);
@@ -154,7 +152,7 @@ cv::Mat DlibInit::cal_detect_angle()
     // out_intrinsics 输出3*3 相机矩阵
     // out_rotation 输出3*3 外部旋转矩阵
     // out_translation 输出4*1 平移向量
-    // eulerAngles 包含三个以度为单位的欧拉旋转角
+    // eulerAngles 包含三个以度为单的欧拉旋转角
     cv::decomposeProjectionMatrix(pose_mat, out_intrinsics, out_rotation, out_translation, cv::noArray(), cv::noArray(), cv::noArray(), euler_angle);
 
     return euler_angle;
@@ -203,7 +201,8 @@ void DlibInit::clear_68_point()
 }
 
 
-std::vector<cv::Point2d> DlibInit::get_68_point(){
+std::vector<cv::Point2d> DlibInit::get_68_point()
+{
     if(face_68_point.empty())
         return std::vector<cv::Point2d>();
     return face_68_point;

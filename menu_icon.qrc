@@ -9,4 +9,10 @@
         <file>res/Start.png</file>
         <file>res/about.png</file>
     </qresource>
+    <qresource prefix="/sound">
+        <file>res/4031.wav</file>
+        <file>res/copen_mouth.wav</file>
+        <file>res/4570.wav</file>
+        <file>res/11385.wav</file>
+    </qresource>
 </RCC>

@@ -180,8 +180,6 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpenCamera"/>
-   <addaction name="actionStart"/>
-   <addaction name="actionPause"/>
    <addaction name="actionAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -191,7 +189,7 @@
      <normaloff>:/image/res/Camera.png</normaloff>:/image/res/Camera.png</iconset>
    </property>
    <property name="text">
-    <string>OpenCamera</string>
+    <string>相机位置初始化</string>
    </property>
   </action>
   <action name="actionExit">

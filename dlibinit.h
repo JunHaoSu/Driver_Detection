@@ -1,6 +1,6 @@
 #ifndef DLIBINIT_H
 #define DLIBINIT_H
-
+#include <QSettings>
 #include <opencv2/opencv.hpp>
 #include <dlib/opencv.h>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -15,6 +15,7 @@
 #include <vector>
 #include <string>
 #include <cstdio>
+#include "utilsfunction.h"
 
 class DlibInit {
 public:
