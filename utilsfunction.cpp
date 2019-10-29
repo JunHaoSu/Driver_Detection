@@ -86,7 +86,7 @@ bool comp_head_pose(std::vector<one_frame_data> &frame_vector)
      //减去摄像头位置的初始角度
      //std::cout<<sum<<" "<<sum2<<" "<<frame_vector.size()<<" "<<head_pose_init<<std::endl;
      //如果和值在去除摄像头的初始值后依然超过3度,判定低头
-     if(sum2 > 3.0*frame_vector.size()){
+     if(sum2 > 4.0*frame_vector.size()){
          return false;
      }else{
          return true;

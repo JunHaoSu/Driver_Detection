@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/model">
-        <file>config.ini</file>
-        <file>mmod_human_face_detector.dat</file>
-    </qresource>
-</RCC>
